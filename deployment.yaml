@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nk-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nk-gateway
+  template:
+    metadata:
+      labels:
+        app: nk-gateway
+    spec:
+      containers:
+      - name: nk-gateway-container
+        image: your-image:tag
+        ports:
+        - containerPort: 3000  # Change this to the port your app listens on
+        envFrom:
+        - configMapRef:
+            name: nk-gateway-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nk-gateway
+spec:
+  selector:
+    app: nk-gateway
+  ports:
+  - protocol: TCP
+    port: 80  # Change this to the port your app listens on
+    targetPort: 3000  # Change this to the port your app listens on
